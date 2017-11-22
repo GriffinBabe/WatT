@@ -15,7 +15,7 @@ def aboutus(request):
 def clientspace(request):
     return render_to_response('client.html')
 
-
+#helooooooo
 
 def login(request):
     if 'user_id' in request.GET: #If the user already signed up
