@@ -22,5 +22,5 @@ urlpatterns = [
     url(r'^$',views.login),
     url(r'^aboutus$',views.aboutus),
     url(r'^login$',views.clientspace),
-    url(r'^test$',views.sativa),
+    url(r'^home$', views.home)
 ]

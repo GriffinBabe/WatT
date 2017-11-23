@@ -1,9 +1,11 @@
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, render
 from wattApp.models import *
 from django.http    import HttpResponseRedirect
 from django.http import HttpResponse
 from django.shortcuts import get_list_or_404
-import matplotlib.pyplot as plt
+import matplotlib
+matplotlib.use('Agg') #Necessary to avoid GUI conflicts between matplotlib and django
+from matplotlib import pyplot as plt
 import numpy as np
 from matplotlib.backends.backend_agg import FigureCanvasAgg
 
@@ -14,8 +16,6 @@ def aboutus(request):
 
 def clientspace(request):
     return render_to_response('client.html')
-
-#helooooooo
 
 def login(request):
     if 'user_id' in request.GET: #If the user already signed up
@@ -38,53 +38,43 @@ def login(request):
 
 
 def home(request):
+    '''Currently displays both humidity and temperature graphs
+    of each plant owned by the user registered in the session'''
 
-    if 'user_id' not in request.session:#If session has expired, send to login
+    if 'user_id' not in request.session or len(User.objects.filter(user_id=request.session['user_id'])) == 0:#If session has expired, send to login
         return HttpResponseRedirect('/')
 
     user_id=request.session['user_id']
     user=User.objects.get(user_id=user_id)
     plants=Plant.objects.filter(owner=user)
-    plots = []
+    plot_names = []
 
     for plant in plants: #Makes a temperature and humidity plot for every plant and adds it to the plot list
         Tmeasures = TMeasure.objects.filter(plant=plant).values_list('value') #Temperature part
         f = plt.figure()
-        plt.title(plant.name+' temperature plot.')
+        plt.title(plant.name+' Temperature Evolution')
         plt.plot(Tmeasures,'r')
         plt.xlabel('Date')
         plt.ylabel('Temperature')
         plt.legend()
         canvas = FigureCanvasAgg(f)
+        title= plant.name + '_Temperature.png'
+        plt.savefig('wattApp/static/'+title) #We save the plot in the static directory
+        plot_names.append(title) #We add the file name in the list of plots
         plt.close()
-        #TODO: Add a way to convert canvas into an image renderable by html
-        plots.append(canvas)
 
-        HMeasure = HMeasure.object.filter(plant=plant).values_list('value') #Humidity part
+
+        HMeasures = HMeasure.objects.filter(plant=plant).values_list('value') #Humidity part
         g = plt.figure()
-        plt.title(plant.name+' humidity plot.')
-        plt.plot(HMeasure,'b')
+        plt.title(plant.name+' Humidity Evolution')
+        plt.plot(HMeasures,'b')
         plt.xlabel('Date')
         plt.ylabel('Humidity')
         plt.legend()
         gcanvas = FigureCanvasAgg(g)
+        title= plant.name + '_Humidity.png'
+        plot_names.append(title)
+        plt.savefig('wattApp/static/'+title)
         plt.close()
-        #TODO: Same here
-        plots.append(gcanvas)
 
-
-def sativa(request):
-    plant = Plant.objects.filter(name="Sativa")
-    mesures = TMeasure.objects.filter(plant=plant).values_list('value')
-    print(mesures)
-    f = plt.figure()
-    plt.plot(mesures,'r')
-    plt.xlabel("Time")
-    plt.ylabel("Temperature")
-    plt.ylim(10,40)
-    plt.legend()
-    canvas = FigureCanvasAgg(f)
-    response = HttpResponse(content_type='image/png')
-    canvas.print_png(response)
-    plt.close(f)
-    return response
+    return render_to_response('sativa.html', {'list': plot_names})
