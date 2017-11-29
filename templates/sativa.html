@@ -2,12 +2,22 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Sativa Temperature Display</title>
+    <title>User Pannel</title>
 </head>
 <body>
-{% for image in list %}
-    {% load static %}
-    <img src="{% static image %}" />
+<h1>User Pannel</h1>
+<h2>Temperature</h2>
+{% for value in tmes %}
+    <!-- {% load static %}
+    <img src="{% static image %}" /> -->
+    <p>{{ value }}</p>
 {% endfor %}
+<h2> Humidity </h2>
+{% for plant in hmes %}
+    {% for value in plant %}
+        <p>{{ value }}</p>
+    {% endfor %}
+{% endfor %}
+
 </body>
 </html>

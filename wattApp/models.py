@@ -4,7 +4,6 @@ class User(models.Model):
 
     user_id=models.CharField(max_length=20)
     password=models.CharField(max_length=40)
-    #age=models.IntegerField()
 
     def __str__(self):
         return self.user_id
@@ -22,11 +21,11 @@ class Plant(models.Model):
 class TMeasure(models.Model):
 
     value=models.IntegerField()
-    plant=models.ForeignKey(Plant)
+    user=models.ForeignKey(User)
     date=models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return "Temperature Value: "+str(self.value)+". From Plant: "+self.plant.name+"."
+        return "Room Temperature Value: "+str(self.value)
     
 
 class HMeasure(models.Model):
