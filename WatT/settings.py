@@ -25,7 +25,8 @@ SECRET_KEY = 'a$ceg(%!nnxhov8rlk(ng1%j2o29ko9^y1=uw3^e-g5y9+m5am'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['164.15.10.90']
+ALLOWED_HOSTS = ['164.15.10.90',
+                 '127.0.0.1']
 
 
 # Application definition

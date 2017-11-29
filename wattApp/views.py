@@ -49,7 +49,7 @@ def home(request):
     plants=Plant.objects.filter(owner=user)
     '''plot_names = []'''
 
-    Tmeasures = TMeasure.objects.filter(user=user).values_list('value')  # Temperature part
+    Tmeasures = User_Measure.objects.filter(user=user).values_list('temperature', 'humidity')  # Room part
     '''f = plt.figure()
     plt.title('Room Temperature Evolution')
     plt.plot(Tmeasures, 'r')
@@ -65,7 +65,7 @@ def home(request):
     hmes=[]
 
     for plant in plants: #Makes a temperature and humidity plot for every plant and adds it to the plot list
-        HMeasures = HMeasure.objects.filter(plant=plant).values_list('value') #Humidity part
+        HMeasures = Plant_Measure.objects.filter(plant=plant).values_list('humidity') #Humidity part
         '''g = plt.figure()
         plt.title(plant.name+' Humidity Evolution')
         plt.plot(HMeasures,'b')

@@ -4,7 +4,7 @@ from .models import *
 
 admin.site.register(User)
 admin.site.register(Plant)
-admin.site.register(HMeasure)
-admin.site.register(TMeasure)
+admin.site.register(User_Measure)
+admin.site.register(Plant_Measure)
 
 

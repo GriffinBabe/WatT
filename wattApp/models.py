@@ -18,23 +18,24 @@ class Plant(models.Model):
         return "Plant name: "+self.name+". Owned by: "+self.owner.user_id
         
 
-class TMeasure(models.Model):
+class User_Measure(models.Model):
 
-    value=models.IntegerField()
+    temperature=models.IntegerField()
+    humidity=models.IntegerField()
     user=models.ForeignKey(User)
     date=models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return "Room Temperature Value: "+str(self.value)
+        return "Room Temperature Value: "+str(self.temperature)+" & Humidity value: "+str(self.humidity)
     
 
-class HMeasure(models.Model):
+class Plant_Measure(models.Model):
 
-    value=models.IntegerField()
+    humidity=models.IntegerField()
     plant=models.ForeignKey(Plant)
     date=models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return "Humidity Value: "+str(self.value)+". From Plant: "+self.plant.name+"."
+        return "Humidity Value: "+str(self.humidity)+". From Plant: "+self.plant.name+"."
     
     
