@@ -3,11 +3,10 @@ from wattApp.models import *
 from django.http    import HttpResponseRedirect
 from django.http import HttpResponse
 from django.shortcuts import get_list_or_404
-'''import matplotlib
+import matplotlib
 matplotlib.use('Agg') #Necessary to avoid GUI conflicts between matplotlib and django
 from matplotlib import pyplot as plt
-import numpy as np
-from matplotlib.backends.backend_agg import FigureCanvasAgg'''
+from matplotlib.backends.backend_agg import FigureCanvasAgg
 
 
 def aboutus(request):
@@ -47,26 +46,28 @@ def home(request):
     user_id=request.session['user_id']
     user=User.objects.get(user_id=user_id)
     plants=Plant.objects.filter(owner=user)
-    '''plot_names = []'''
+    plant_plot_names = []
 
-    Tmeasures = User_Measure.objects.filter(user=user).values_list('temperature', 'humidity')  # Room part
-    '''f = plt.figure()
-    plt.title('Room Temperature Evolution')
+    Tmeasures = User_Measure.objects.filter(user=user).values_list('temperature')  # Room part
+    HRoomMeasures = User_Measure.objects.filter(user=user).values_list('humidity')
+    f = plt.figure()
+    plt.title('Temperature (red) & Humidity (blue) Evolution')
     plt.plot(Tmeasures, 'r')
+    plt.plot(HRoomMeasures,'b')
     plt.xlabel('Date')
-    plt.ylabel('Temperature')
+    plt.ylabel('Temperature & Humidity')
     plt.legend()
     canvas = FigureCanvasAgg(f)
     title = user.user_id + '_Temperature.png'
     plt.savefig('wattApp/static/' + title)  # We save the plot in the static directory
-    plot_names.append(title)  # We add the file name in the list of plots
-    plt.close()'''
+    room_plot_name = title
+    plt.close()
 
     hmes=[]
 
     for plant in plants: #Makes a temperature and humidity plot for every plant and adds it to the plot list
         HMeasures = Plant_Measure.objects.filter(plant=plant).values_list('humidity') #Humidity part
-        '''g = plt.figure()
+        g = plt.figure()
         plt.title(plant.name+' Humidity Evolution')
         plt.plot(HMeasures,'b')
         plt.xlabel('Date')
@@ -74,9 +75,9 @@ def home(request):
         plt.legend()
         gcanvas = FigureCanvasAgg(g)
         title= plant.name + '_Humidity.png'
-        plot_names.append(title)
+        plant_plot_names.append(title)
         plt.savefig('wattApp/static/'+title)
-        plt.close()'''
+        plt.close()
         hmes.append(HMeasures)
 
-    return render_to_response('sativa.html', {'hmes': hmes, 'tmes': Tmeasures})
+    return render_to_response('sativa.html', {'list':plant_plot_names,'roomgraph':room_plot_name})

@@ -6,18 +6,15 @@
 </head>
 <body>
 <h1>User Pannel</h1>
-<h2>Temperature</h2>
-{% for value in tmes %}
-    <!-- {% load static %}
-    <img src="{% static image %}" /> -->
-    <p>{{ value }}</p>
-{% endfor %}
-<h2> Humidity </h2>
-{% for plant in hmes %}
-    {% for value in plant %}
-        <p>{{ value }}</p>
-    {% endfor %}
-{% endfor %}
 
+<h2>Room measures</h2>
+{% load static %}
+<img src="{% static roomgraph %}">
+
+<h2>Plant measures</h2>
+{% for image in list %}
+    {% load static %}
+    <img src="{% static image %}">
+{% endfor %}
 </body>
 </html>
