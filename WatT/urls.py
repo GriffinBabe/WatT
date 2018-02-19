@@ -22,5 +22,10 @@ urlpatterns = [
     url(r'^$',views.login),
     url(r'^aboutus$',views.aboutus),
     url(r'^login$',views.clientspace),
-    url(r'^home$', views.home)
+    url(r'^home$', views.home),
+    url(r'^create_h/(?P<plant_id>\d+)/(?P<humidity>\d+)/$', views.create_Hmeasure),
+    url(r'^create_u/(?P<user_id>\d+)/(?P<humidity>\d+)/(?P<temperature>\d+)/$', views.create_Usermeasure),
+    url(r'^get_goal/(?P<plant_id>\d+)/$', views.get_goal),
+    url(r'^change_goal$',views.change_goal)
+
 ]

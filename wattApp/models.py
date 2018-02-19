@@ -26,7 +26,8 @@ class User_Measure(models.Model):
     date=models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return "Room Temperature Value: "+str(self.temperature)+" & Humidity value: "+str(self.humidity)
+        return "Room Temperature Value: "+str(self.temperature)\
+               +" & Humidity value: "+str(self.humidity)
     
 
 class Plant_Measure(models.Model):
@@ -37,5 +38,4 @@ class Plant_Measure(models.Model):
 
     def __str__(self):
         return "Humidity Value: "+str(self.humidity)+". From Plant: "+self.plant.name+"."
-    
-    
+

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Change Goal</title>
+</head>
+<body>
+{% for id in list %}
+<form action='/change_goal' method='get'>
+    <p>Change Humidity Goal (max 70%): <input type='number' name='goal' min="0" max="70"/></p>
+    {% if error %}
+        <p>{{error}}</p>
+    {% endif %}
+    <input type="hidden" name="id" value={{ id }}>
+    <p><input type='submit' value='Change Goal'/></p>
+</form>
+{% endfor %}
+</body>
+</html>
