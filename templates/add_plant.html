@@ -10,7 +10,7 @@
 
 <form action="/add_plant" method="get">
     <p>Plant Name: <input type="text" name="name" maxlength="30"/> </p>
-    <p>Humidity Goal (max 70%): <input type='number' name='goal' min="0" max="70"/></p>
+    <p>Humidity Goal compared to calibration (-100% - 100%): <input type='number' name='goal' min="-100" max="100"/></p>
     <p>sID: <input type="number" name="sid"/></p>
     {% if error %}
         <p>{{error}}</p>

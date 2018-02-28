@@ -28,5 +28,6 @@ urlpatterns = [
     url(r'^create_u/(?P<user_id>\d+)/(?P<humidity>\d+)/(?P<temperature>\d+)/$', views.create_Usermeasure),
     url(r'^get_goal/(?P<plant_id>\d+)/$', views.get_goal),
     url(r'^change_goal$',views.change_goal),
-    url(r'^add_plant$', views.add_plant)
+    url(r'^add_plant$', views.add_plant),
+    url(r'^history$', views.history)
 ]

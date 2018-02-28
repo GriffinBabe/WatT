@@ -48,13 +48,20 @@ def home(request):
     plants=Plant.objects.filter(owner=user)
     plant_plot_names = []
 
+    delay=180
+    qty_displayed=60*24//delay
+
     Tmeasures = User_Measure.objects.filter(user=user).values_list('temperature')  # Room part
     HRoomMeasures = User_Measure.objects.filter(user=user).values_list('humidity')
 
     f = plt.figure()
     plt.title('Temperature (red) & Humidity (blue) Evolution')
-    plt.plot(Tmeasures, 'r')
-    plt.plot(HRoomMeasures,'b')
+    if len(Tmeasures)>qty_displayed:
+        plt.plot(Tmeasures[len(Tmeasures)-qty_displayed:], 'r')
+        plt.plot(HRoomMeasures[len(HRoomMeasures)-qty_displayed:],'b')
+    else:
+        plt.plot(Tmeasures, 'r')
+        plt.plot(HRoomMeasures, 'b')
     plt.tick_params(
         axis='x',  # changes apply to the x-axis
         which='both',  # both major and minor ticks are affected
@@ -82,7 +89,10 @@ def home(request):
             top='off',  # ticks along the top edge are off
             labelbottom='off')  # labels along the bottom edge are off
         plt.title(plant.name+' Humidity Evolution')
-        plt.plot(HMeasures,'b')
+        if len(HMeasures)>qty_displayed:
+            plt.plot(HMeasures[len(HMeasures)-qty_displayed:],'b')
+        else:
+            plt.plot(HMeasures, 'b')
         plt.xlabel('Date')
         plt.ylabel('Humidity')
         plt.legend()
@@ -95,13 +105,75 @@ def home(request):
 
     return render_to_response('client.html', {'list':plant_plot_names, 'roomgraph':room_plot_name})
 
+def history(request):
+    '''Currently displays both humidity and temperature graphs
+    of each plant owned by the user registered in the session'''
+
+    if 'user_id' not in request.session or len(User.objects.filter(user_id=request.session['user_id'])) == 0:#If session has expired, send to login
+        return HttpResponseRedirect('/')
+
+    user_id=request.session['user_id']
+    user=User.objects.get(user_id=user_id)
+    plants=Plant.objects.filter(owner=user)
+    plant_plot_names = []
+
+    Tmeasures = User_Measure.objects.filter(user=user).values_list('temperature')  # Room part
+    HRoomMeasures = User_Measure.objects.filter(user=user).values_list('humidity')
+
+    f = plt.figure()
+    plt.title('Temperature (red) & Humidity (blue) Evolution')
+    plt.plot(Tmeasures, 'r')
+    plt.plot(HRoomMeasures, 'b')
+    plt.tick_params(
+        axis='x',  # changes apply to the x-axis
+        which='both',  # both major and minor ticks are affected
+        bottom='off',  # ticks along the bottom edge are off
+        top='off',  # ticks along the top edge are off
+        labelbottom='off')  # labels along the bottom edge are off
+    plt.xlabel('Date')
+    plt.ylabel('Temperature & Humidity')
+    plt.legend()
+    canvas = FigureCanvasAgg(f)
+    title = user.user_id + '_Temperature.png'
+    plt.savefig('wattApp/static/' + title)  # We save the plot in the static directory
+    room_plot_name = title
+    plt.close()
+
+    hmes=[]
+
+    for plant in plants: #Makes a temperature and humidity plot for every plant and adds it to the plot list
+        HMeasures = Plant_Measure.objects.filter(plant=plant).values_list('humidity') #Humidity part
+        g = plt.figure()
+        plt.tick_params(
+            axis='x',  # changes apply to the x-axis
+            which='both',  # both major and minor ticks are affected
+            bottom='off',  # ticks along the bottom edge are off
+            top='off',  # ticks along the top edge are off
+            labelbottom='off')  # labels along the bottom edge are off
+        plt.title(plant.name+' Humidity Evolution')
+        plt.plot(HMeasures, 'b')
+        plt.xlabel('Date')
+        plt.ylabel('Humidity')
+        plt.legend()
+        gcanvas = FigureCanvasAgg(g)
+        title= plant.name + '_Humidity.png'
+        plant_plot_names.append(title)
+        plt.savefig('wattApp/static/'+title)
+        plt.close()
+        hmes.append(HMeasures)
+
+    return render_to_response('history.html', {'list':plant_plot_names, 'roomgraph':room_plot_name})
+
 def create_Hmeasure(request, plant_id, humidity):
     Plant_Measure.objects.create(plant=Plant.objects.get(sID=plant_id),humidity=humidity)
     return HttpResponse("Thanks for submitting the plant temperature")
 
 def create_Usermeasure(request, user_id,humidity,temperature):
-    User_Measure.objects.create(user=User.objects.get(id=user_id),temperature=temperature,humidity=humidity)
-    return HttpResponse("Thanks for submitting the User temperature and humidity")
+    if len(User.objects.filter(sID=user_id))==0:
+        return HttpResponse("There is no user with that sID")
+    else:
+        User_Measure.objects.create(user=User.objects.get(sID=user_id),temperature=temperature,humidity=humidity)
+        return HttpResponse("Thanks for submitting the User temperature and humidity")
 
 def get_goal(request,plant_id):
     plant = Plant.objects.get(sID=plant_id)
@@ -129,7 +201,6 @@ def change_goal(request):
         return render_to_response('change_goal.html', {'list': plants_sid, 'error': error})
     else:
         return render_to_response('change_goal.html', {'list': plants_sid})
-
 
 def add_plant(request):
 
@@ -166,5 +237,3 @@ def add_user(request):
         return render_to_response('add_user.html',{'error':error})
     else:
         return render_to_response('add_user.html')
-
-

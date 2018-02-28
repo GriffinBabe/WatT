@@ -7,7 +7,7 @@
 <body>
 {% for id in list %}
 <form action='/change_goal' method='get'>
-    <p>Change Humidity Goal of plant {{ id }} (max 70%): <input type='number' name='goal' min="0" max="70"/></p>
+    <p>Change Humidity Goal of plant {{ id }} compared to calibration (-100% - 100%): <input type='number' name='goal' min="-100" max="100"/></p>
     {% if error %}
         <p>{{error}}</p>
     {% endif %}
