@@ -103,9 +103,9 @@ def change_goal(request):
     user_id = request.session['user_id']
     user = User.objects.get(user_id=user_id)
     plants = Plant.objects.filter(owner=user)
-    plants_id = []
+    plants_sid = []
     for plant in plants:
-        plants_id.append(plant.id)
+        plants_sid.append(plant.sID)
 
     if 'id' in request.GET:
         plant=Plant.objects.get(id=int(request.GET['id']))
@@ -113,9 +113,9 @@ def change_goal(request):
         plant.save()
         error="The Humidity Goal has been change"
 
-        return render_to_response('change_goal.html', {'list': plants_id, 'error': error})
+        return render_to_response('change_goal.html', {'list': plants_sid, 'error': error})
     else:
-        return render_to_response('change_goal.html', {'list': plants_id})
+        return render_to_response('change_goal.html', {'list': plants_sid})
 
 
 def add_plant(request):
@@ -140,10 +140,10 @@ def add_plant(request):
         return  render_to_response('add_plant.html')
 
 def add_user(request):
-    if 'username' in request.GET:
+    if 'name' in request.GET:
         if request.GET['pass'] == request.GET['rpass']:
             if len(User.objects.filter(sID=request.GET['sid'])) == 0:
-                user = User.objects.create(user_id=request.GET["username"], password=request.GET['pass'], sID=request.GET['sid'])
+                user = User.objects.create(user_id=request.GET["name"], password=request.GET['pass'], sID=request.GET['sid'])
                 user.save()
                 error = "User created."
             else:

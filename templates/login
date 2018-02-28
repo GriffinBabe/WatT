@@ -8,6 +8,7 @@ h1 {font-family:Verdana; font-size:3.4em}
 <a href="/about"> About us. </a>
 <p></p>
 <a align = 'right' href="/admin/"> Admin space. </a>
+<p></p>
 <a align = 'left' href="/add_user"> Add User.</a>
 
 <center>
