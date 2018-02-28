@@ -4,6 +4,7 @@ class User(models.Model):
 
     user_id=models.CharField(max_length=20)
     password=models.CharField(max_length=40)
+    sID=models.IntegerField()
 
     def __str__(self):
         return self.user_id
@@ -13,6 +14,7 @@ class Plant(models.Model):
     owner=models.ForeignKey(User)
     name=models.CharField(max_length=20)
     humidityGoal=models.IntegerField()
+    sID = models.IntegerField()
 
     def __str__(self):
         return "Plant name: "+self.name+". Owned by: "+self.owner.user_id

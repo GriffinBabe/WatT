@@ -80,10 +80,10 @@ def home(request):
         plt.close()
         hmes.append(HMeasures)
 
-    return render_to_response('sativa.html', {'list':plant_plot_names,'roomgraph':room_plot_name})
+    return render_to_response('client.html', {'list':plant_plot_names, 'roomgraph':room_plot_name})
 
 def create_Hmeasure(request, plant_id, humidity):
-    Plant_Measure.objects.create(plant=Plant.objects.get(id=plant_id),humidity=humidity)
+    Plant_Measure.objects.create(plant=Plant.objects.get(sID=plant_id),humidity=humidity)
     return HttpResponse("Thanks for submitting the plant temperature")
 
 def create_Usermeasure(request, user_id,humidity,temperature):
@@ -91,7 +91,7 @@ def create_Usermeasure(request, user_id,humidity,temperature):
     return HttpResponse("Thanks for submitting the User temperature and humidity")
 
 def get_goal(request,plant_id):
-    plant = Plant.objects.get(id=plant_id)
+    plant = Plant.objects.get(sID=plant_id)
     return HttpResponse(plant.humidityGoal)
 
 def change_goal(request):
@@ -116,5 +116,42 @@ def change_goal(request):
         return render_to_response('change_goal.html', {'list': plants_id, 'error': error})
     else:
         return render_to_response('change_goal.html', {'list': plants_id})
+
+
+def add_plant(request):
+
+    if 'user_id' not in request.session or len(
+            User.objects.filter(user_id=request.session['user_id'])) == 0:  # If session has expired, send to login
+        return HttpResponseRedirect('/')
+
+    user_id = request.session['user_id']
+    user = User.objects.get(user_id=user_id)
+
+    if 'name' in request.GET:
+        if len(Plant.objects.filter(sID=request.GET['sid'])) !=0 : #If sID already used -> incorrect
+            error='Incorrect sID'
+        else:
+            plant = Plant.objects.create(owner=user, name=request.GET['name'], humidityGoal=request.GET['goal'], sID=request.GET['sid'])
+            plant.save()
+            error="Plant Added"
+        return render_to_response('add_plant.html',{'error':error})
+
+    else:
+        return  render_to_response('add_plant.html')
+
+def add_user(request):
+    if 'username' in request.GET:
+        if request.GET['pass'] == request.GET['rpass']:
+            if len(User.objects.filter(sID=request.GET['sid'])) == 0:
+                user = User.objects.create(user_id=request.GET["username"], password=request.GET['pass'], sID=request.GET['sid'])
+                user.save()
+                error = "User created."
+            else:
+                error = 'Incorrect sID'
+        else:
+            error = 'Two different passwords'
+        return render_to_response('add_user.html',{'error':error})
+    else:
+        return render_to_response('add_user.html')
 
 

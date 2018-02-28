@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add new user.</title>
+</head>
+<body>
+<p>Add new User</p>
+<form action="/add_user" method="get">
+    <p>Username: <input type="text" name="name" maxlength="30"/> </p>
+    <p>Password: <input type="text" name="pass" maxlength="30"/> </p>
+    <p>Repeat Password: <input type="text" name="rpass" maxlength="30"/> </p>
+    <p>sID: <input type="number" name="sid"/></p>
+    {% if error %}
+        <p>{{error}}</p>
+    {% endif %}
+    <p><input type='submit' value='Add User'/></p>
+</form>
+
+</body>
+</html>

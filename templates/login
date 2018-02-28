@@ -5,9 +5,10 @@ h1 {font-family:Verdana; font-size:3.4em}
 <title>WatT</title>
 </head>
 <body>
-<a href="/about/"> About us. </a>
+<a href="/about"> About us. </a>
 <p></p>
 <a align = 'right' href="/admin/"> Admin space. </a>
+<a align = 'left' href="/add_user"> Add User.</a>
 
 <center>
 <h1 align='middle'>Welcome to WatT</h1>

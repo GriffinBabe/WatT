@@ -2,12 +2,22 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>WatT - Client Space.</title>
-    <a href="/home/">Homepage</a>
-    <a href="/aboutus/">About us</a>
+    <title>User Pannel</title>
 </head>
 <body>
-    <h1>WatT Client Space.</h1>
-    <p>Welcome to the client space. Here users will have access to the plants they own from everywhere in the world.</p>
+<h1>User Pannel</h1>
+
+<h2>Room measures</h2>
+{% load static %}
+<img src="{% static roomgraph %}">
+
+<h2>Plant measures</h2>
+{% for image in list %}
+    {% load static %}
+    <img src="{% static image %}">
+{% endfor %}
+
+<p><a href="/change_goal"> Change Humidity Goal.</a></p>
+<p><a href="/add_plant"> Add a new plant.</a> </p>
 </body>
 </html>
