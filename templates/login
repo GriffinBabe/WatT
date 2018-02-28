@@ -12,7 +12,9 @@ h1 {font-family:Verdana; font-size:3.4em}
 <a align = 'left' href="/add_user"> Add User.</a>
 
 <center>
-<h1 align='middle'>Welcome to WatT</h1>
+<h1 align='middle'>Welcome to... </h1>
+    {% load static %}
+    <img src="{% static 'logo.png' %}" width=500 align="middle">
 </center>
 
 <form action='/' method='get'>

@@ -50,10 +50,17 @@ def home(request):
 
     Tmeasures = User_Measure.objects.filter(user=user).values_list('temperature')  # Room part
     HRoomMeasures = User_Measure.objects.filter(user=user).values_list('humidity')
+
     f = plt.figure()
     plt.title('Temperature (red) & Humidity (blue) Evolution')
     plt.plot(Tmeasures, 'r')
     plt.plot(HRoomMeasures,'b')
+    plt.tick_params(
+        axis='x',  # changes apply to the x-axis
+        which='both',  # both major and minor ticks are affected
+        bottom='off',  # ticks along the bottom edge are off
+        top='off',  # ticks along the top edge are off
+        labelbottom='off')  # labels along the bottom edge are off
     plt.xlabel('Date')
     plt.ylabel('Temperature & Humidity')
     plt.legend()
@@ -68,6 +75,12 @@ def home(request):
     for plant in plants: #Makes a temperature and humidity plot for every plant and adds it to the plot list
         HMeasures = Plant_Measure.objects.filter(plant=plant).values_list('humidity') #Humidity part
         g = plt.figure()
+        plt.tick_params(
+            axis='x',  # changes apply to the x-axis
+            which='both',  # both major and minor ticks are affected
+            bottom='off',  # ticks along the bottom edge are off
+            top='off',  # ticks along the top edge are off
+            labelbottom='off')  # labels along the bottom edge are off
         plt.title(plant.name+' Humidity Evolution')
         plt.plot(HMeasures,'b')
         plt.xlabel('Date')
