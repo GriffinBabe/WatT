@@ -13,9 +13,6 @@ def aboutus(request):
     return render_to_response('aboutus.html')
 
 
-def clientspace(request):
-    return render_to_response('client.html')
-
 def login(request):
     if 'user_id' in request.GET: #If the user already signed up
         user_id=request.GET['user_id']
@@ -59,7 +56,7 @@ def home(request):
     if len(Tmeasures)>qty_displayed:
         plt.plot(Tmeasures[len(Tmeasures)-qty_displayed:], 'r')
         plt.plot(HRoomMeasures[len(HRoomMeasures)-qty_displayed:],'b')
-    else:
+    else: 
         plt.plot(Tmeasures, 'r')
         plt.plot(HRoomMeasures, 'b')
     plt.tick_params(
