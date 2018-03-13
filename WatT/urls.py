@@ -21,7 +21,6 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$',views.login),
     url(r'^about$',views.aboutus),
-    url(r'^login$',views.clientspace),
     url(r'^home$', views.home),
     url(r'^add_user$', views.add_user),
     url(r'^create_h/(?P<plant_id>\d+)/(?P<humidity>\d+)/$', views.create_Hmeasure),
